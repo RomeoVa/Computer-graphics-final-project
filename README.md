@@ -10,7 +10,7 @@ What controls/shaders/additional libraries you are going to use or need
 References to similar projects
 Un proyecto similar es: https://www.youtube.com/watch?v=zAtnKZ-i4LY&feature=youtu.be
 
-1. Representación educativa en México
+2. Representación educativa en México
 The objective/idea of the project: 
 El objetivo es la representación gráfica de estudio que tiene cada estado en México. Tomando datos del INEGI y con visualización en 3D, se puede hacer un estudio más específico de los problemas que surgen en el país relacionado con la educación. 
 How the user will interact with the project
