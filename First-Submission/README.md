@@ -11,6 +11,10 @@ For each idea, define the following:
 
 **Deadline:** 26/09/2019
 
+Team members:
+- Mauricio Peón García A01024162
+- Romeo Varela Nagore A01020736
+
 Ideas:
 1. Anatomía humana
 * The objective/idea of the project:
