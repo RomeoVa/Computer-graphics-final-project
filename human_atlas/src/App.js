@@ -15,7 +15,7 @@ function Obj() {
     config: { mass: 3, friction: 40, tension: 800 }
   }))
   const bindDrag = useDrag(
-    ({ offset: [x, y], vxvy: [vx, vy], down, ...props }) =>
+    ({ offset: [x, y], vxvy: [vx, vy], down, ...props }) => 
       set({ position: [x / aspect, -y / aspect, 0], rotation: [y / aspect, x / aspect, 0] }),
     { pointerEvents: true }
   )
