@@ -55,7 +55,7 @@ function loadOBJs(part,quantity)
         function(object)
         {
             
-            var texture = new THREE.TextureLoader().load('../textures/muscle_texture.png');
+            var texture = new THREE.TextureLoader().load('../textures/bones_texture.png');
             
             object.traverse( function ( child ) 
             {
@@ -71,14 +71,12 @@ function loadOBJs(part,quantity)
 
 
             bone.scale.set(1,1,1);
-            bone.position.z = -3;
-            bone.position.x = -1.5;
             //bone.rotation.x = Math.PI / 180 * 15;
             //bone.rotation.y = -3;
             //console.log("bo",bone);
-            //bone.position.set(30, 0, 0);
+            bone.position.set(0, 0, 0);
             bones.add(bone);
-            scene.add(bones);
+            root.add(bones);
         },
         function ( xhr ) {
 
@@ -116,7 +114,7 @@ function createScene(canvas)
 
     // Add  a camera so we can view the scene
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
-    camera.position.set(0, 20, 150);
+    camera.position.set(0, 0, -10);
     //camera.position.set(0, 0, 150);
     scene.add(camera);
 
@@ -147,7 +145,7 @@ function createScene(canvas)
 
     
     loadOBJs("bones",3);
-    //loadOBJs("veins",3);
+    loadOBJs("veins",3);
     //loadOBJs("muscles",16);
     //loadMuscles();
     //dragControls = new THREE.DragControls( bones, camera, renderer.domElement );
