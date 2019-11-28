@@ -12,8 +12,6 @@ veins = null,
 arteries = null,
 muscles = null;
 
-var bonesArray = musclesArray = arteriesArray = veinsArray = [];
-
 var arm = null;
 
 
