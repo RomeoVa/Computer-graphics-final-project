@@ -4,7 +4,11 @@ camera = null,
 raycaster,
 root = null,
 controls,
-loopAnimation = false;
+loopAnimation = false,
+bone = null,
+orbitControls = null,
+dragControls=null;
+var objLoader;
 
 // Groups
 var bones = null,
@@ -12,7 +16,11 @@ veins = null,
 arteries = null,
 muscles = null;
 
+var bonesDict = [];
+
 var arm = null;
+
+var SHADOW_MAP_WIDTH = 700, SHADOW_MAP_HEIGHT = 700;
 
 
 var mouse = new THREE.Vector2(), INTERSECTED, CLICKED;
@@ -29,24 +37,27 @@ function run() {
     
         // Render the scene
         renderer.render( scene, camera );
+
+        // Update the camera controller
+        orbitControls.update();
       
 }
 
 
 
-function loadObj()
+function loadOBJs(part,quantity)
 {
     if(!objLoader)
         objLoader = new THREE.OBJLoader();
-    
-    objLoader.load(
-        '../models/penguin/PenguinBaseMesh.obj',
-
+    for(let i=1; i<=quantity; i++)
+    {
+        objLoader.load(
+            '../ArmObjs/'+part+'/'+i+'.obj',
         function(object)
         {
             
-            var texture = new THREE.TextureLoader().load('../models/penguin/Penguin_Diffuse_Color.png');
-         
+            var texture = new THREE.TextureLoader().load('../textures/muscle_texture.png');
+            
             object.traverse( function ( child ) 
             {
                 if ( child instanceof THREE.Mesh ) 
@@ -57,17 +68,18 @@ function loadObj()
                     child.material.map = texture;
                 }
             } );
-                    
-            penguin = object;
-            penguin.scale.set(3,3,3);
-            penguin.position.z = -3;
-            penguin.position.x = -1.5;
-            penguin.rotation.x = Math.PI / 180 * 15;
-            penguin.rotation.y = -3;
-            console.log("pinguino",penguin);
-            group.add(penguin);
-            penguin.position.set(10, 0, 0);
-            scene.add(object);
+            bone = object;
+
+
+            bone.scale.set(1,1,1);
+            bone.position.z = -3;
+            bone.position.x = -1.5;
+            //bone.rotation.x = Math.PI / 180 * 15;
+            //bone.rotation.y = -3;
+            //console.log("bo",bone);
+            //bone.position.set(30, 0, 0);
+            bones.add(bone);
+            scene.add(bones);
         },
         function ( xhr ) {
 
@@ -78,15 +90,14 @@ function loadObj()
         function ( error ) {
     
             console.log( 'An error happened' );
-    
+        
         });
+    }
+ 
 }
 
-
-var SHADOW_MAP_WIDTH = 1024, SHADOW_MAP_HEIGHT = 1024;
-
-function createScene(canvas) {
-    
+function createScene(canvas) 
+{
     // Create the Three.js renderer and attach it to our canvas
     renderer = new THREE.WebGLRenderer( { canvas: canvas, antialias: true } );
 
@@ -94,23 +105,25 @@ function createScene(canvas) {
     renderer.setSize( window.innerWidth, window.innerHeight );
 
     window.addEventListener( 'resize', onWindowResize, false );
-    
-
 
     // Turn on shadows
-    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.enabled = false;
     // Options are THREE.BasicShadowMap, THREE.PCFShadowMap, PCFSoftShadowMap
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     
     // Create a new Three.js scene
     scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0xff00ff );
+    scene.background = new THREE.Color( 0xffffff );
 
     // Add  a camera so we can view the scene
     camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
     camera.position.set(0, 20, 150);
     //camera.position.set(0, 0, 150);
     scene.add(camera);
+
+    //Controlers
+    orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    
 
     // Create a group to hold all the objects
     root = new THREE.Object3D;
@@ -131,11 +144,14 @@ function createScene(canvas) {
 
     ambientLight = new THREE.AmbientLight ( 0x888888 );
     root.add(ambientLight);
-    
-  
+    bones = new THREE.Object3D;
 
     
-    raycaster = new THREE.Raycaster();
+    loadOBJs("bones",3);
+    //loadOBJs("veins",3);
+    //loadOBJs("muscles",16);
+    //loadMuscles();
+    //dragControls = new THREE.DragControls( bones, camera, renderer.domElement );
 
    
     // Now add the group to our scene
