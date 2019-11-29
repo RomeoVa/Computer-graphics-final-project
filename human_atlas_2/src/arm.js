@@ -16,14 +16,21 @@ veins = null,
 arteries = null,
 muscles = null;
 
-var bonesDict = [];
+var bonesArray = [];
+var musclesArray = [];
+var veinsArray = [];
+var arteriesArray = [];
+var armArray = [];
+
+var invisibleItems = [];
+
 
 var arm = null;
 
 var SHADOW_MAP_WIDTH = 700, SHADOW_MAP_HEIGHT = 700;
 
 
-var mouse = new THREE.Vector2(), INTERSECTED, CLICKED;
+var mouse = new THREE.Vector2(), INTERSECTED, CLICKED,returnedItem;
 
 function onWindowResize() 
 {
@@ -44,7 +51,7 @@ function run() {
 }
 
 
-function loadOBJs(part,quantity,text)
+function loadOBJs(part,quantity,text,group, array)
 {
     if(!objLoader)
         objLoader = new THREE.OBJLoader();
@@ -67,15 +74,17 @@ function loadOBJs(part,quantity,text)
                     child.material.map = texture;
                 }
             } );
-            bone = object;
+            
+            array.push(object);
+            armArray.push(object);
 
-            bone.scale.set(3,3,3);
+            object.scale.set(3,3,3);
             //bone.rotation.x = Math.PI / 180 * 15;
             //bone.rotation.y = -3;
             //console.log("bo",bone);
             //bone.position.set(0, 0, 10);
-            bones.add(bone);
-            root.add(bones);
+            group.add(object);
+            root.add(group);
         },
         function ( xhr ) {
 
@@ -91,6 +100,72 @@ function loadOBJs(part,quantity,text)
     }
  
 }
+function returnModel()
+{
+    console.log("AGAP");
+    returnedItem = invisibleItems.pop();
+
+    returnedItem.traverse ( function (child) {
+        if (child instanceof THREE.Mesh) {
+            child.visible = true;
+            console.log(child);
+        }
+    });
+}
+function onDocumentMouseDown(event)
+{
+    event.preventDefault();
+    event.preventDefault();
+    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+    // find intersections
+    raycaster.setFromCamera( mouse, camera );
+
+    var intersects = raycaster.intersectObjects( armArray,true );
+
+    if ( intersects.length > 0 ) 
+    {
+        CLICKED = intersects[ 0 ].object;
+        CLICKED.traverse ( function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.visible = false;
+                console.log(child);
+            }
+        });
+
+        invisibleItems.push(CLICKED);
+        //scene.remove(CLICKED.parent);
+       
+    }
+
+    //     if(!deadAnimator.running)
+    //     {
+            
+    //         console.log("entra");
+    //         CLICKED.parent.animation = 'dead';
+            
+    //         deadAnimator.interps[0].target = CLICKED.parent.rotation;
+    //         deadAnimator.interps[1].target = CLICKED.parent.position;
+            
+    //         playAnimations();
+    //         console.log(dead);
+            
+    //         score+=1;
+    //         $("#score").text(parseInt(score));
+    //         spawn();
+           
+    //     }
+    // } 
+    // else 
+    // {
+    //     if ( CLICKED ) 
+    //         CLICKED.material.emissive.setHex( CLICKED.currentHex );
+
+    //     CLICKED = null;
+    // }
+}
+
 
 function createScene(canvas) 
 {
@@ -117,11 +192,12 @@ function createScene(canvas)
     camera.lookAt( new THREE.Vector3(0,0,0));
     //camera.position.set(0, 0, 150);
     scene.add(camera);
+    document.addEventListener('mousedown', onDocumentMouseDown);
+
 
     //Controlers
     // orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
     
-
     // Create a group to hold all the objects
     root = new THREE.Object3D;
     
@@ -139,18 +215,23 @@ function createScene(canvas)
     spotLight.shadow.mapSize.width = SHADOW_MAP_WIDTH;
     spotLight.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
 
+
+    raycaster = new THREE.Raycaster();
+
     ambientLight = new THREE.AmbientLight ( 0x888888 );
     root.add(ambientLight);
     bones = new THREE.Object3D;
-
+    muscles = new THREE.Object3D;
+    veins = new THREE.Object3D;
+    arteries = new THREE.Object3D;
     console.log("bones position", bones.position);
     console.log("camera position", camera.position);
 
     
-    loadOBJs("bones",3,'bones');
-    loadOBJs("veins",3,'vein');
-    loadOBJs("muscles",16,'muscle');
-    loadOBJs("arteries",9,'arterie');
+    loadOBJs("bones",3,'bones',bones,bonesArray);
+    loadOBJs("veins",3,'vein',veins,veinsArray);
+    loadOBJs("muscles",16,'muscle',muscles,musclesArray);
+    loadOBJs("arteries",9,'arterie',arteries,arteriesArray);
     //dragControls = new THREE.DragControls( bones, camera, renderer.domElement );
 
    
