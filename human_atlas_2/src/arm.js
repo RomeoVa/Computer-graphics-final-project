@@ -1,4 +1,5 @@
 var renderer = null, 
+CSS3DRenderer = null,
 scene = null, 
 camera = null,
 raycaster,
@@ -24,10 +25,15 @@ var armArray = [];
 
 var invisibleItems = [];
 
+var content = '<div id="css-content">' +
+      '<h1>Bicep Brachii</h1>' +
+      '<p> The biceps (Latin: musculus biceps brachii, "two-headed muscle of the arm", sometimes abbreviated to biceps brachii) is a large muscle that lies on the front of the upper arm between the shoulder and the elbow. </p>' +
+    '</div>';
+
 
 var arm = null;
 
-var SHADOW_MAP_WIDTH = 700, SHADOW_MAP_HEIGHT = 700;
+var SHADOW_MAP_WIDTH = 400, SHADOW_MAP_HEIGHT = 400;
 
 
 var mouse = new THREE.Vector2(), INTERSECTED, CLICKED,returnedItem;
@@ -44,9 +50,10 @@ function run() {
     
         // Render the scene
         renderer.render( scene, camera );
-
+        CSS3DRenderer.render( scene, camera );
+        
         // Update the camera controller
-        //orbitControls.update();
+        orbitControls.update();
       
 }
 
@@ -84,11 +91,10 @@ function loadOBJs(part,quantity,text,group, array)
             //console.log("bo",bone);
             //bone.position.set(0, 0, 10);
             group.add(object);
-            root.add(group);
         },
         function ( xhr ) {
 
-            console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+            //console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
     
         },
         // called when loading has errors
@@ -166,47 +172,34 @@ function onDocumentMouseDown(event)
     // }
 }
 
-
-function createScene(canvas) 
+function createCSS3DObject(content) 
 {
-    // Create the Three.js renderer and attach it to our canvas
-    renderer = new THREE.WebGLRenderer( { canvas: canvas, antialias: true } );
+      // convert the string to dome elements
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = content;
+      var div = wrapper.firstChild;
 
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
+      // set some values on the div to style it.
+      // normally you do this directly in HTML and 
+      // CSS files.
+      div.style.width = '400px';
+      div.style.height = '400px';
+      div.style.opacity = 0.7;
+      div.style.background = new THREE.Color(Math.random() * 0xffffff).getStyle();
 
-    window.addEventListener( 'resize', onWindowResize, false );
+      // create a CSS3Dobject and return it.
+      var object = new THREE.CSS3DObject(div);
+      return object;
+}
 
-    // Turn on shadows
-    renderer.shadowMap.enabled = false;
-    // Options are THREE.BasicShadowMap, THREE.PCFShadowMap, PCFSoftShadowMap
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    
-    // Create a new Three.js scene
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0xffffff );
-
-    // Add  a camera so we can view the scene
-    camera = new THREE.PerspectiveCamera( 45, canvas.width / canvas.height, 1, 4000 );
-    camera.position.set(0, 0, -20);
-    camera.lookAt( new THREE.Vector3(0,0,0));
-    //camera.position.set(0, 0, 150);
-    scene.add(camera);
-    document.addEventListener('mousedown', onDocumentMouseDown);
-
-
-    //Controlers
-    // orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-    
-    // Create a group to hold all the objects
-    root = new THREE.Object3D;
-    
+function setAllLights()
+{
+    //SpotLight
     spotLight = new THREE.SpotLight (0xffffff);
     spotLight.position.set(-30, 8, -10);
     spotLight.target.position.set(-2, 0, -2);
-    root.add(spotLight);
 
-    spotLight.castShadow = true;
+    spotLight.castShadow = false;
 
     spotLight.shadow.camera.near = 1;
     spotLight.shadow.camera.far = 200;
@@ -215,11 +208,71 @@ function createScene(canvas)
     spotLight.shadow.mapSize.width = SHADOW_MAP_WIDTH;
     spotLight.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
 
+    root.add(spotLight);
 
-    raycaster = new THREE.Raycaster();
-
+    //AmbienLight
     ambientLight = new THREE.AmbientLight ( 0x888888 );
     root.add(ambientLight);
+
+
+}
+
+
+function createScene(canvas) 
+{
+    // *************** Renders **********************
+    // Create the Three.js renderer and attach it to our canvas
+    renderer = new THREE.WebGLRenderer( { canvas: canvas, antialias: true } );
+
+    //renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+    //create a CSS3DRenderer
+    CSS3DRenderer = new THREE.CSS3DRenderer();
+    CSS3DRenderer.setSize(window.innerWidth, window.innerHeight);
+//        renderer.domElement.style.position = 'absolute';
+//        renderer.domElement.style.top = 0;
+
+    // add the output of the renderer to the html element
+    document.body.appendChild(CSS3DRenderer.domElement);
+
+    //window.addEventListener( 'resize', onWindowResize, false );
+
+    // Turn on shadows
+    renderer.shadowMap.enabled = false;
+    // Options are THREE.BasicShadowMap, THREE.PCFShadowMap, PCFSoftShadowMap
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    
+    // ************ Scene *********************
+    // Create a new Three.js scene
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color( 0xffffff );
+
+    // *************** Camara ******************
+    // Add  a camera so we can view the scene
+    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 40000 );
+    camera.position.set(0, 0, -700);
+    camera.lookAt( new THREE.Vector3(0,0,0));
+    scene.add(camera);
+    // ****************************************
+
+
+    document.addEventListener('mousedown', onDocumentMouseDown);
+
+
+    //*************** Controlers ***************
+    orbitControls = new THREE.OrbitControls(camera, CSS3DRenderer.domElement);
+    //dragControls = new THREE.DragControls( bones, camera, renderer.domElement );
+    
+    // Create a group to hold all the objects
+    root = new THREE.Object3D;
+
+    //Set lights
+    setAllLights();
+    
+    raycaster = new THREE.Raycaster();
+
+    //**************** Objects ******************
     bones = new THREE.Object3D;
     muscles = new THREE.Object3D;
     veins = new THREE.Object3D;
@@ -232,7 +285,18 @@ function createScene(canvas)
     loadOBJs("veins",3,'vein',veins,veinsArray);
     loadOBJs("muscles",16,'muscle',muscles,musclesArray);
     loadOBJs("arteries",9,'arterie',arteries,arteriesArray);
-    //dragControls = new THREE.DragControls( bones, camera, renderer.domElement );
+
+    root.add(bones);
+    root.add(muscles);
+    root.add(veins);
+    root.add(arteries);
+    
+    //Css 3d objects
+    var cssElement = createCSS3DObject(content);
+    cssElement.position.set(-10, 0, 0);
+    cssElement.rotation.set(0,Math.PI,0);
+    console.log(cssElement);
+    scene.add(cssElement);
 
    
     // Now add the group to our scene
