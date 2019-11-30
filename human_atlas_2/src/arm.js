@@ -27,7 +27,7 @@ var invisibleItems = [];
 
 var arm = null;
 
-var SHADOW_MAP_WIDTH = 700, SHADOW_MAP_HEIGHT = 700;
+var SHADOW_MAP_WIDTH = 500, SHADOW_MAP_HEIGHT = 500;
 
 
 var mouse = new THREE.Vector2(), INTERSECTED, CLICKED,returnedItem;
