@@ -12,10 +12,12 @@ body {
 
 #container {
 	position:absolute;
+	display: block;
 }
 
 #webglcanvas {
 	border:none;
+	display: block;
 	background-color:#ffffff;
 }
 

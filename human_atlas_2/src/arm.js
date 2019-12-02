@@ -146,6 +146,8 @@ function showModel(id)
             armArray[i].traverse ( function (child) {
                 if (child instanceof THREE.Mesh) {
                     child.visible = true;
+                    child.position.set(0,0,0);
+                    console.log("Hijo",child);
                 }
             });
         }
@@ -430,11 +432,11 @@ function createScene(canvas)
     createInfoDictionary(musclesNames,musclesInfo,16,muscleInfo);
 
 
-//     var geometry = new THREE.SphereGeometry( 15, 8, 6 );
-// var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-// var sphere = new THREE.Mesh( geometry, material );
-// console.log(sphere.position);
-// scene.add( sphere );
+    var geometry = new THREE.SphereGeometry( 15, 8, 6 );
+var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+var sphere = new THREE.Mesh( geometry, material );
+console.log(sphere.position);
+scene.add( sphere );
 
     root.add(bones);
     root.add(muscles);
@@ -456,6 +458,8 @@ function createScene(canvas)
   
       mesh.rotation.x = -Math.PI / 2;
       mesh.position.y = -4.02;
+
+      //scene.add(mesh);
 
        console.log("MESH",mesh.position);
    
