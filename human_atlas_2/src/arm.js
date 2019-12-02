@@ -11,6 +11,9 @@ orbitControls = null,
 dragControls=null;
 var objLoader;
 
+
+var mapUrl = "../images/checker_large.gif";
+
 var deleteElements = false;
 
 var bonesInfo = [];
@@ -357,7 +360,6 @@ function setAllLights()
 }
 
 
-
 function createScene(canvas) 
 {
     // *************** Renders **********************
@@ -419,7 +421,6 @@ function createScene(canvas)
     arteries = new THREE.Object3D;
     
 
-
     loadOBJs("bones",3,'bones',bones,bonesArray,bonesNames);
     loadOBJs("veins",3,'vein',veins,veinsArray,veinsNames);
     loadOBJs("muscles",16,'muscle',muscles,musclesArray,musclesNames);
@@ -429,11 +430,11 @@ function createScene(canvas)
     createInfoDictionary(musclesNames,musclesInfo,16,muscleInfo);
 
 
-    var geometry = new THREE.SphereGeometry( 5, 32, 32 );
-var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-var sphere = new THREE.Mesh( geometry, material );
-console.log(sphere.position);
-scene.add( sphere );
+//     var geometry = new THREE.SphereGeometry( 15, 8, 6 );
+// var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+// var sphere = new THREE.Mesh( geometry, material );
+// console.log(sphere.position);
+// scene.add( sphere );
 
     root.add(bones);
     root.add(muscles);
@@ -441,6 +442,23 @@ scene.add( sphere );
     root.add(arteries);
     console.log("bones position", root.position);
     console.log("camera position", camera.position);
+
+      // Create a texture map
+      var map = new THREE.TextureLoader().load(mapUrl);
+      map.wrapS = map.wrapT = THREE.RepeatWrapping;
+      map.repeat.set(8, 8);
+
+      var color = 0xffffff;
+
+      // Put in a ground plane to show off the lighting
+      geometry = new THREE.PlaneGeometry(200, 200, 50, 50);
+      var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({color:color, map:map, side:THREE.DoubleSide}));
+  
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.position.y = -4.02;
+
+       console.log("MESH",mesh.position);
+   
     
     //Css 3d objects
     var cssElement = createCSS3DObject(content);
