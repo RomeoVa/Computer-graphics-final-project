@@ -24,6 +24,7 @@
 <script src="../libs/three.js/CSS3DRenderer.js"></script>
 
 <script src="arm.js"></script>
+<script src="database.js"></script>
 
 
 
@@ -50,34 +51,94 @@
 <body>
 	<div id="mySidenav" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-		<a href="#">Bones</a>
-		<a href="#">Muscles</a>
-		<a href="#">Veins</a>
-		<a href="#">Arteries</a>
+			<button type="button" class="collapsible" onclick="showGroup(bonesArray)">Bones</button>
+			<div class="content">
+					<button onclick="showModel('FJ1499')"type="button" >Humerus</button>
+					<button onclick="showModel('FJ1500')"type="button" >Radius</button>
+					<button onclick="showModel('FJ1501')"type="button">Ulna</button>
+			</div>
+
+			<button type="button" class="collapsible" >Muscles</button>
+			<div class="content">
+					<button  onclick="showModel('FJ1471')" type="button" >Flexor retinaculum of  wrist</button>
+					<button  onclick="showModel('FJ1472')" type="button" >Humeral head of flexor carpi ulnaris</button>
+					<button  onclick="showModel('FJ1473')" type="button">Humeral head of pronator teres</button>
+					<button  onclick="showModel('FJ1474')" type="button" >Long head of biceps brachii</button>
+					<button  onclick="showModel('FJ1475')" type="button" >Long head of triceps brachii</button>
+					<button  onclick="showModel('FJ1476')" type="button">Medial head of triceps brachii</button>
+					<button  onclick="showModel('FJ1477')" type="button" >Right brachialis</button>
+					<button  onclick="showModel('FJ1478')" type="button" >Right brachioradialis.</button>
+					<button  onclick="showModel('FJ1479')" type="button">Extensor carpi radialis brevis.</button>
+					<button  onclick="showModel('FJ1480')" type="button" >Extensor carpi radialis longus</button>
+					<button  onclick="showModel('FJ1481')" type="button" >Flexor carpi radialis</button>
+					<button  onclick="showModel('FJ1482')" type="button">Flexor digitorum superficialis</button>
+					<button  onclick="showModel('FJ1483')" type="button" >Palmaris longus.</button>
+					<button  onclick="showModel('FJ1484')" type="button" >Short head of biceps brachii</button>
+					<button  onclick="showModel('FJ1485')" type="button">Ulnar head of flexor carpi ulnaris.</button>
+					<button  onclick="showModel('FJ1486')" type="button">Ulnar head of pronator teres</button>
+			</div>
+
+			<button type="button" class="collapsible">Veins</button>
+			<div class="content">
+					<button  onclick="showModel('FJ1496')" >Right basilic vein</button>
+					<button  onclick="showModel('FJ1497')" >Right cephalic vein</button>
+					<button  onclick="showModel('FJ1498')" >Right median cubital vein</button>
+			</div>
+
+			<button type="button" class="collapsible">Arteries</button>
+			<div class="content">
+					<button  onclick="showModel('FJ1487')" >Dorsal carpal branch of radial artery</button>
+					<button  onclick="showModel('FJ1488')" >Radial collateral branch of deep brachial artery</button>
+					<button  onclick="showModel('FJ1489')" >Right brachial artery</button>
+					<button  onclick="showModel('FJ1490')" >Deep brachial artery.</button>
+					<button  onclick="showModel('FJ1491')" >Inferior ulnar collateral artery</button>
+					<button  onclick="showModel('FJ1492')" >Posterior ulnar recurrent artery</button>
+					<button  onclick="showModel('FJ1493')" >Radial recurrent artery</button>
+					<button  onclick="showModel('FJ1494')" >Superior ulnar collateral artery</button>
+					<button  onclick="showModel('FJ1495')" >Trunk of right ulnar artery.</button>
+			</div>
 	</div>
 
 	
 
 	<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
 	<button onclick="returnModel()" class="btn"><i class="fas fa-undo-alt"></i></button>
+	<input type="radio" id="huey" name="delete" value="huey" checked>
+	<label for="huey">Delete element</label>
+	<input type="radio" id="huey" name="select" value="huey" checked>
+	<label for="huey">Select element</label>
     <div id="container">
         <canvas id="webglcanvas"></canvas>
 	</div>
-	<ul>
-		<li><a class="active" href="#home">Home</a></li>
-		<li><a href="#news">News</a></li>
-		<li><a href="#contact">Contact</a></li>
-		<li><a href="#about">About</a></li>
-	</ul>
 </body>
 
 <script>
+
 	function openNav() {
 		document.getElementById("mySidenav").style.width = "250px";
 	}
 	
 	function closeNav() {
 		document.getElementById("mySidenav").style.width = "0";
+	}
+	function myFunction() {
+		document.getElementById("myDropdown").classList.toggle("show");
+	}
+
+
+	var coll = document.getElementsByClassName("collapsible");
+	var i;
+
+	for (i = 0; i < coll.length; i++) {
+		coll[i].addEventListener("click", function() {
+			this.classList.toggle("active");
+			var content = this.nextElementSibling;
+			if (content.style.display === "block") {
+			content.style.display = "none";
+			} else {
+			content.style.display = "block";
+			}
+		});
 	}
 </script>
 
