@@ -16,10 +16,8 @@ var mapUrl = "../images/checker_large.gif";
 
 var deleteElements = false;
 
-var bonesInfo = [];
-var musclesInfo = [];
-var veinsInfo = [];
-var arteriesInfo = [];
+var armInfo = [];
+
 
 // Groups
 var bones = null,
@@ -90,12 +88,12 @@ function run() {
       
 }
 
-function createInfoDictionary(namesArray,infoArray,size,info)
+function createInfoDictionary(namesArray,size,info)
 {
     for( var i = 0; i < size; i++)
     {
 
-        infoArray[namesArray[i]] = info[i];
+        armInfo[namesArray[i]] = info[i];
         //console.log("Info: \n",   infoArray[namesArray[i]]);
     }
     //console.log("Dictionary: ", infoArray);
@@ -126,7 +124,7 @@ function showModel(id)
         //console.log("parte: ",armArray[i]);
     }
 
-    var content = '<div id="css-content">' + bonesInfo[id] + '</div>'
+    var content = '<div id="css-content">' + armInfo[id] + '</div>'
 
     //Css 3d objects
     cssElement = createCSS3DObject(content);
@@ -311,6 +309,7 @@ function createCSS3DObject(content)
       div.style.width = '400px';
       div.style.height = '400px';
       div.style.opacity = 0.7;
+      div.style.borderRadius= '10px';
       div.style.background = new THREE.Color(Math.random() * 0xffffff).getStyle();
 
       // create a CSS3Dobject and return it.
@@ -411,8 +410,10 @@ function createScene(canvas)
     loadOBJs("muscles",16,'muscle',muscles,musclesArray,musclesNames);
     loadOBJs("arteries",9,'arterie',arteries,arteriesArray,arteriesNames);
 
-    createInfoDictionary(bonesNames,bonesInfo,3,boneInfo);
-    createInfoDictionary(musclesNames,musclesInfo,16,muscleInfo);
+    createInfoDictionary(bonesNames,3,boneInfo);
+    createInfoDictionary(musclesNames,16,muscleInfo);
+    createInfoDictionary(veinsNames,3,veinInfo);
+    createInfoDictionary(arteriesNames,9,arterieInfo);
 
 
 //     var geometry = new THREE.SphereGeometry( 15, 8, 6 );
