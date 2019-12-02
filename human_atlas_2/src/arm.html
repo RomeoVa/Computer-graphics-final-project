@@ -58,7 +58,7 @@
 					<button onclick="showModel('FJ1501')"type="button">Ulna</button>
 			</div>
 
-			<button type="button" class="collapsible" >Muscles</button>
+			<button type="button" class="collapsible"  onclick="showGroup(musclesArray)" >Muscles</button>
 			<div class="content">
 					<button  onclick="showModel('FJ1471')" type="button" >Flexor retinaculum of  wrist</button>
 					<button  onclick="showModel('FJ1472')" type="button" >Humeral head of flexor carpi ulnaris</button>
@@ -78,14 +78,14 @@
 					<button  onclick="showModel('FJ1486')" type="button">Ulnar head of pronator teres</button>
 			</div>
 
-			<button type="button" class="collapsible">Veins</button>
+			<button type="button" class="collapsible"  onclick="showGroup(veinsArray)">Veins</button>
 			<div class="content">
 					<button  onclick="showModel('FJ1496')" >Right basilic vein</button>
 					<button  onclick="showModel('FJ1497')" >Right cephalic vein</button>
 					<button  onclick="showModel('FJ1498')" >Right median cubital vein</button>
 			</div>
 
-			<button type="button" class="collapsible">Arteries</button>
+			<button type="button" class="collapsible"  onclick="showGroup(arteriesArray)">Arteries</button>
 			<div class="content">
 					<button  onclick="showModel('FJ1487')" >Dorsal carpal branch of radial artery</button>
 					<button  onclick="showModel('FJ1488')" >Radial collateral branch of deep brachial artery</button>
@@ -103,11 +103,15 @@
 
 	<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
 	<button onclick="returnModel()" class="btn"><i class="fas fa-undo-alt"></i></button>
-	<input type="radio" id="huey" name="delete" value="huey" checked>
-	<label for="huey">Delete element</label>
-	<input type="radio" id="huey" name="select" value="huey" checked>
-	<label for="huey">Select element</label>
-    <div id="container">
+	
+	
+		<input type="radio" id="delete" value="delete" name = "tag"  onclick="changeFlag(this.value)" >
+		<label for="delete">Delete element</label>
+	
+		<input type="radio" id="select" value="select"  name = "tag" onclick="changeFlag(this.value)" checked>
+		<label for="select">Select element</label>
+	
+	<div id="container">
         <canvas id="webglcanvas"></canvas>
 	</div>
 </body>

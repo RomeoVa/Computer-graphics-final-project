@@ -88,7 +88,7 @@ function run() {
         CSS3DRenderer.render( scene, camera );
         
         // Update the camera controller
-        //orbitControls.update();
+        orbitControls.update();
       
 }
 
@@ -208,12 +208,27 @@ function returnModel()
         }
     });
 }
+
+function changeFlag(tag)
+{
+    if(tag == "delete")
+    {
+        deleteElements = true;
+    }else{
+        deleteElements = false;
+    }
+    console.log(deleteElements);
+
+}
+
 function onDocumentMouseDown(event)
 {
     event.preventDefault();
     event.preventDefault();
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+    //deleteElements = document.getElementById("myRadio").value;
 
     // find intersections
 
@@ -226,14 +241,16 @@ function onDocumentMouseDown(event)
     {
         CLICKED = intersects[ 0 ].object;
         //CLICKED.child.position.scale.set(100,100,100);
-        
-        CLICKED.traverse ( function (child) {
-            if (child instanceof THREE.Mesh) {
-                child.visible = false;
-                //child.scale.set(15,15,15);
-                console.log(CLICKED.parent);
-            }
-        });
+        if(deleteElements)
+        {
+            CLICKED.traverse ( function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.visible = false;
+                    //child.scale.set(15,15,15);
+                    console.log(CLICKED.parent);
+                }
+            });
+        }
         
 
         invisibleItems.push(CLICKED);
@@ -348,7 +365,7 @@ function createScene(canvas)
     // *************** Camara ******************
     // Add  a camera so we can view the scene
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 40000 );
-    camera.position.set(0, 0, -700);
+    camera.position.set(0, 0, -20);
     camera.lookAt( new THREE.Vector3(0,0,0));
     scene.add(camera);
     // ****************************************
@@ -358,7 +375,7 @@ function createScene(canvas)
 
 
     //*************** Controlers ***************
-    //orbitControls = new THREE.OrbitControls(camera, CSS3DRenderer.domElement);
+    orbitControls = new THREE.OrbitControls(camera, CSS3DRenderer.domElement);
     //dragControls = new THREE.DragControls( bones, camera, renderer.domElement );
     
     // Create a group to hold all the objects
@@ -374,8 +391,7 @@ function createScene(canvas)
     muscles = new THREE.Object3D;
     veins = new THREE.Object3D;
     arteries = new THREE.Object3D;
-    console.log("bones position", bones.position);
-    console.log("camera position", camera.position);
+    
 
 
     loadOBJs("bones",3,'bones',bones,bonesArray,bonesNames);
@@ -387,10 +403,18 @@ function createScene(canvas)
     createInfoDictionary(musclesNames,musclesInfo,16,muscleInfo);
 
 
+    var geometry = new THREE.SphereGeometry( 5, 32, 32 );
+var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+var sphere = new THREE.Mesh( geometry, material );
+console.log(sphere.position);
+scene.add( sphere );
+
     root.add(bones);
     root.add(muscles);
     root.add(veins);
     root.add(arteries);
+    console.log("bones position", root.position);
+    console.log("camera position", camera.position);
     
     //Css 3d objects
     var cssElement = createCSS3DObject(content);

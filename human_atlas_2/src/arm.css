@@ -36,6 +36,9 @@ body {
   margin-left: 50px;
 }
 
+input {
+  margin: .4rem;
+}
 
 
 body .btn {
