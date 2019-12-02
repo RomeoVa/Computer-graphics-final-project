@@ -11,6 +11,13 @@ orbitControls = null,
 dragControls=null;
 var objLoader;
 
+var deleteElements = false;
+
+var bonesInfo = [];
+var musclesInfo = [];
+var veinsInfo = [];
+var arteriesInfo = [];
+
 // Groups
 var bones = null,
 veins = null,
@@ -22,6 +29,34 @@ var musclesArray = [];
 var veinsArray = [];
 var arteriesArray = [];
 var armArray = [];
+
+var bonesNames = ["FJ1499","FJ1500","FJ1501"];
+var musclesNames = ["FJ1471",
+    "FJ1472",
+    "FJ1473",
+    "FJ1474",
+    "FJ1475",
+    "FJ1476",
+    "FJ1477",
+    "FJ1478",
+    "FJ1479",
+    "FJ1480",
+    "FJ1481",
+    "FJ1482",
+    "FJ1483",
+    "FJ1484",
+    "FJ1485",
+    "FJ1486"];
+var veinsNames = ["FJ1496","FJ1497","FJ1498"];
+var arteriesNames = ["FJ1487",
+    "FJ1488",
+    "FJ1489",
+    "FJ1490",
+    "FJ1491",
+    "FJ1492",
+    "FJ1493",
+    "FJ1494",
+    "FJ1495"];
 
 var invisibleItems = [];
 
@@ -83,15 +118,69 @@ function run() {
       
 }
 
+function createInfoDictionary(namesArray,infoArray,size,info)
+{
+    for( var i = 0; i < size; i++)
+    {
 
-function loadOBJs(part,quantity,text,group, array)
+        infoArray[namesArray[i]] = info[i];
+        //console.log("Info: \n",   infoArray[namesArray[i]]);
+    }
+    //console.log("Dictionary: ", infoArray);
+}
+
+function showModel(id)
+{
+    for(var i = 0; i < armArray.length; i++)
+    {
+        armArray[i].traverse ( function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.visible = false;
+            }
+        });
+        if(armArray[i].name == id)
+        {
+            armArray[i].traverse ( function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.visible = true;
+                }
+            });
+        }
+        //console.log("parte: ",armArray[i]);
+    }
+   
+}
+
+function showGroup(group)
+{
+    console.log("show group");
+    for(var i = 0; i < armArray.length; i++)
+    {
+        armArray[i].traverse ( function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.visible = false;
+            }
+        });
+    }
+
+    for(var i = 0; i < group.length; i++)
+    {
+        group[i].traverse ( function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.visible = true;
+            }
+        });
+    }
+}
+
+function loadOBJs(part,quantity,text,group, array,namesArray)
 {
     if(!objLoader)
         objLoader = new THREE.OBJLoader();
-    for(let i=1; i<=quantity; i++)
+    for(let i=0; i<quantity; i++)
     {
         objLoader.load(
-            '../ArmObjs/'+part+'/'+i+'.obj',
+            '../ArmObjs/'+part+'/'+(i+1)+'.obj',
         function(object)
         {
             
@@ -107,11 +196,12 @@ function loadOBJs(part,quantity,text,group, array)
                     child.material.map = texture;
                 }
             } );
-            
+            object.name = namesArray[i];
             array.push(object);
+            object.scale.set(3,3,3);
             armArray.push(object);
 
-            object.scale.set(3,3,3);
+            
             //bone.rotation.x = Math.PI / 180 * 15;
             //bone.rotation.y = -3;
             //console.log("bo",bone);
@@ -152,6 +242,8 @@ function onDocumentMouseDown(event)
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
     // find intersections
+
+    console.log("click");
     raycaster.setFromCamera( mouse, camera );
 
     var intersects = raycaster.intersectObjects( armArray,true );
@@ -160,13 +252,12 @@ function onDocumentMouseDown(event)
     {
         CLICKED = intersects[ 0 ].object;
         //CLICKED.child.position.scale.set(100,100,100);
-        console.log("kjsdfhkja");
         
         CLICKED.traverse ( function (child) {
             if (child instanceof THREE.Mesh) {
-                //child.visible = false;
-                child.scale.set(15,15,15);
-                console.log(child);
+                child.visible = false;
+                //child.scale.set(15,15,15);
+                console.log(CLICKED.parent);
             }
         });
         
@@ -249,6 +340,7 @@ function setAllLights()
 }
 
 
+
 function createScene(canvas) 
 {
     // *************** Renders **********************
@@ -267,7 +359,7 @@ function createScene(canvas)
     // add the output of the renderer to the html element
     document.body.appendChild(CSS3DRenderer.domElement);
 
-    //window.addEventListener( 'resize', onWindowResize, false );
+    window.addEventListener( 'resize', onWindowResize, false );
 
     // Turn on shadows
     renderer.shadowMap.enabled = false;
@@ -311,11 +403,15 @@ function createScene(canvas)
     console.log("bones position", bones.position);
     console.log("camera position", camera.position);
 
-    
-    loadOBJs("bones",3,'bones',bones,bonesArray);
-    loadOBJs("veins",3,'vein',veins,veinsArray);
-    loadOBJs("muscles",16,'muscle',muscles,musclesArray);
-    loadOBJs("arteries",9,'arterie',arteries,arteriesArray);
+
+    loadOBJs("bones",3,'bones',bones,bonesArray,bonesNames);
+    loadOBJs("veins",3,'vein',veins,veinsArray,veinsNames);
+    loadOBJs("muscles",16,'muscle',muscles,musclesArray,musclesNames);
+    loadOBJs("arteries",9,'arterie',arteries,arteriesArray,arteriesNames);
+
+    createInfoDictionary(bonesNames,bonesInfo,3,boneInfo);
+    createInfoDictionary(musclesNames,musclesInfo,16,muscleInfo);
+
 
     root.add(bones);
     root.add(muscles);
