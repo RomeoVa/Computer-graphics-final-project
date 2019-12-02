@@ -120,10 +120,11 @@ function showModel(id)
             armArray[i].traverse ( function (child) {
                 if (child instanceof THREE.Mesh) {
                     child.visible = true;
-                    child.position.set(0,0,0);
+                    //child.parent.position.set(0,0,-10);
                     console.log("Hijo",child);
                 }
             });
+            //armArray[i].position.set(500,0,0);
         }
         //console.log("parte: ",armArray[i]);
     }
