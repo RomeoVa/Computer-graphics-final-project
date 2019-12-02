@@ -33,11 +33,7 @@ var content = '<div id="css-content">' +
 
 var arm = null;
 
-<<<<<<< HEAD
 var SHADOW_MAP_WIDTH = 500, SHADOW_MAP_HEIGHT = 500;
-=======
-var SHADOW_MAP_WIDTH = 400, SHADOW_MAP_HEIGHT = 400;
->>>>>>> a6aa45c789f42b560fa76d6cb0f7bffab3e03bf3
 
 
 var mouse = new THREE.Vector2(), INTERSECTED, CLICKED,returnedItem;
@@ -57,7 +53,7 @@ function run() {
         CSS3DRenderer.render( scene, camera );
         
         // Update the camera controller
-        orbitControls.update();
+        //orbitControls.update();
       
 }
 
@@ -137,12 +133,17 @@ function onDocumentMouseDown(event)
     if ( intersects.length > 0 ) 
     {
         CLICKED = intersects[ 0 ].object;
+        //CLICKED.child.position.scale.set(100,100,100);
+        console.log("kjsdfhkja");
+        
         CLICKED.traverse ( function (child) {
             if (child instanceof THREE.Mesh) {
-                child.visible = false;
+                //child.visible = false;
+                child.scale.set(15,15,15);
                 console.log(child);
             }
         });
+        
 
         invisibleItems.push(CLICKED);
         //scene.remove(CLICKED.parent);
@@ -228,7 +229,7 @@ function createScene(canvas)
     // Create the Three.js renderer and attach it to our canvas
     renderer = new THREE.WebGLRenderer( { canvas: canvas, antialias: true } );
 
-    //renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
     //create a CSS3DRenderer
@@ -265,7 +266,7 @@ function createScene(canvas)
 
 
     //*************** Controlers ***************
-    orbitControls = new THREE.OrbitControls(camera, CSS3DRenderer.domElement);
+    //orbitControls = new THREE.OrbitControls(camera, CSS3DRenderer.domElement);
     //dragControls = new THREE.DragControls( bones, camera, renderer.domElement );
     
     // Create a group to hold all the objects
@@ -300,7 +301,7 @@ function createScene(canvas)
     cssElement.position.set(-10, 0, 0);
     cssElement.rotation.set(0,Math.PI,0);
     console.log(cssElement);
-    scene.add(cssElement);
+    //scene.add(cssElement);
 
    
     // Now add the group to our scene
