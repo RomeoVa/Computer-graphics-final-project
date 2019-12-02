@@ -65,6 +65,32 @@ var content = '<div id="css-content">' +
       '<p> The biceps (Latin: musculus biceps brachii, "two-headed muscle of the arm", sometimes abbreviated to biceps brachii) is a large muscle that lies on the front of the upper arm between the shoulder and the elbow. </p>' +
     '</div>';
 
+var vein0 = '<h1>Basilic vein</h1>' +
+'<p>The basilic vein is a large superficial vein of the upper limb that helps drain parts of the hand and forearm. It originates on the medial (ulnar) side of the dorsal venous network of the hand and travels up the base of the forearm, where its course is generally visible through the skin as it travels in the subcutaneous fat and fascia lying superficial to the muscles.</p>';
+var vein1 = '<h1>Cephalic vein</h1>' +
+'<p>The cephalic vein is a superficial vein in the arm. It communicates with the basilic vein via the median cubital vein at the elbow and is located in the superficial fascia along the anterolateral surface of the biceps brachii muscle.</p>';
+var vein2 = '<h1>Median cubital vein</h1>' +
+'<p>The median cubital vein (or median basilic vein) is a superficial vein of the upper limb. It is very clinically relevant as it is routinely used for venipuncture (taking blood) and as a site for an intravenous cannula . It connects the basilic and cephalic vein and becomes prominent when pressure is applied.</p>';
+
+var arterie0 = '<h1>Dorsal carpal branch artery.</h1>' +
+'<p>The Dorsal carpal branch artery is a small vessel which arises beneath the extensor tendons of the thumb; crossing the carpus transversely toward the medial border of the hand, it anastomoses with the dorsal carpal branch of the ulnar artery.</p>';
+var arterie1 = '<h1>Radial collateral branch artery.</h1>' +
+'<p>This artery is a branch of the deep brachial artery. It arises in the arm proper and anastomoses with the radial recurrent artery near the elbow.</p>';
+var arterie2 = '<h1>Brachial artery.</h1>' +
+'<p>The brachial artery is the major blood vessel of the (upper) arm. It is the continuation of the axillary artery beyond the lower margin of teres major muscle. It continues down the ventral surface of the arm until it reaches the cubital fossa at the elbow.</p>';
+var arterie3 = '<h1>Deep brachial artery</h1>' +
+'<p>The deep artery of arm (also known as arteria profunda brachii and the deep brachial artery) is a large vessel which arises from the lateral and posterior part of the brachial artery, just below the lower border of the teres major.</p>';
+var arterie4 = '<h1>Inferior ulnar collateral artery.</h1>' +
+'<p>This artery arises about 5 cm. above the elbow from the brachial artery.</p>';
+var arterie5 = '<h1>Posterior ulnar recurrent artery.</h1>' +
+'<p>The posterior ulnar recurrent artery is an artery in the forearm. It is one of two recurrent arteries that arises from the ulnar artery, the other being the anterior ulnar recurrent artery. The posterior ulnar recurrent artery being much larger than the anterior and also arises somewhat lower than it.</p>';
+var arterie6 = '<h1>Radial recurrent artery</h1>' +
+'<p>The radial recurrent artery arises from the radial artery immediately below the elbow.It ascends between the branches of the radial nerve, lying on the supinator muscle and then between the brachioradialis muscle and the brachialis muscle, supplying these muscles and the elbow-joint, and anastomosing with the terminal part of the profunda brachii.</p>';
+var arterie7 = '<h1>Superior ulnar collateral artery</h1>' +
+'<p>The superior ulnar collateral artery (inferior profunda artery), of small size, arises from the brachial artery a little below the middle of the arm; it frequently springs from the upper part of the a. profunda brachii.</p>';
+var arterie8 = '<h1>Trunk ulnar artery.</h1>' +
+'<p>The ulnar artery is the main blood vessel, with oxygenated blood, of the medial aspect of the forearm. It arises from the brachial artery and terminates in the superficial palmar arch, which joins with the superficial branch of the radial artery. It is palpable on the anterior and medial aspect of the wrist.</p>';
+
 
 var arm = null;
 
