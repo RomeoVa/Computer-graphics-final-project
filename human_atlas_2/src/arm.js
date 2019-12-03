@@ -12,6 +12,10 @@ dragControls=null;
 var objLoader;
 
 
+var currentTime = Date.now();
+
+var animator;
+
 var mapUrl = "../images/checker_large.gif";
 
 var deleteElements = false;
@@ -23,7 +27,8 @@ var armInfo = [];
 var bones = null,
 veins = null,
 arteries = null,
-muscles = null;
+muscles = null,
+arm = null;
 
 var bonesArray = [];
 var musclesArray = [];
@@ -62,7 +67,6 @@ var arteriesNames = ["FJ1487",
 
 var invisibleItems = [];
 
-var arm = null;
 
 var SHADOW_MAP_WIDTH = 500, SHADOW_MAP_HEIGHT = 500;
 
@@ -76,6 +80,35 @@ function onWindowResize()
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
+function createAnimation()
+{
+
+    animator = new KF.KeyFrameAnimator;
+    animator.init({ 
+        interps:
+            [
+                { 
+                    keys:[0, 1], 
+                    values:[
+                            { y:0    },
+                            { y: 2 * Math.PI},
+                            ],
+                }
+            
+            ],
+        loop: false,
+        duration:10000,
+
+    });
+}
+
+
+function playAnimations()
+{
+    animator.start();
+    
+}
+
 function run() {
     requestAnimationFrame(function() { run(); });
     
@@ -83,9 +116,20 @@ function run() {
         renderer.render( scene, camera );
         CSS3DRenderer.render( scene, camera );
         
+        //console.log("camera position", camera.position);
         // Update the camera controller
         orbitControls.update();
+
+        animate();
+        //KF.update();
       
+}
+
+function animate() {
+
+    var now = Date.now();
+    var deltat = now - currentTime;
+    currentTime = now;
 }
 
 function createInfoDictionary(namesArray,size,info)
@@ -122,6 +166,9 @@ function showModel(id)
                     console.log("Hijo",child);
                 }
             });
+            //animator.interps[0].target = armArray[i].rotation;
+            //KF.update();
+            //playAnimations();
             //armArray[i].position.set(500,0,0);
         }
         //console.log("parte: ",armArray[i]);
@@ -379,7 +426,7 @@ function createScene(canvas)
     // *************** Camara ******************
     // Add  a camera so we can view the scene
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 40000 );
-    camera.position.set(0, 0, -20);
+    camera.position.set(-680, 687, -539);
     camera.lookAt( new THREE.Vector3(0,0,0));
     scene.add(camera);
     // ****************************************
@@ -395,6 +442,7 @@ function createScene(canvas)
     
     // Create a group to hold all the objects
     root = new THREE.Object3D;
+    arm = new THREE.Object3D;
 
     //Set lights
     setAllLights();
@@ -418,8 +466,9 @@ function createScene(canvas)
     createInfoDictionary(veinsNames,3,veinInfo);
     createInfoDictionary(arteriesNames,9,arterieInfo);
 
+    createAnimation();
 
-    var geometry = new THREE.SphereGeometry( 15, 8, 6 );
+    var geometry = new THREE.SphereGeometry( 2, 32, 32 );
 var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 var sphere = new THREE.Mesh( geometry, material );
 console.log(sphere.position);
@@ -429,9 +478,19 @@ scene.add( sphere );
     root.add(muscles);
     root.add(veins);
     root.add(arteries);
-    console.log("bones position", root.position);
-    console.log("camera position", camera.position);
 
+    
+    arm.add(bones);
+    arm.add(muscles);
+    arm.add(veins);
+    arm.add(arteries);
+
+    arm.scale.set(.4,.4,.4);
+    arm.position.set(300,120,-1000)
+
+    console.log("bones position", arm.position);
+    console.log("camera position", camera.position);
+    
       // Create a texture map
       var map = new THREE.TextureLoader().load(mapUrl);
       map.wrapS = map.wrapT = THREE.RepeatWrapping;
@@ -454,4 +513,5 @@ scene.add( sphere );
    
     // Now add the group to our scene
     scene.add( root );
+    scene.add( arm );
 }
