@@ -145,11 +145,7 @@ function createInfoDictionary(namesArray,size,info)
 
 function showModel(id)
 {
-    if(cssElement != null)
-    {
-        scene.remove(cssElement);
-    }
-
+    
     for(var i = 0; i < armArray.length; i++)
     {
         armArray[i].traverse ( function (child) {
@@ -174,6 +170,18 @@ function showModel(id)
         //console.log("parte: ",armArray[i]);
     }
 
+    showCSS(id);
+   
+}
+
+function showCSS(id)
+{
+
+    if(cssElement != null)
+    {
+        scene.remove(cssElement);
+    }
+
     var content = '<div id="css-content">' + armInfo[id] + '</div>'
 
     //Css 3d objects
@@ -183,7 +191,7 @@ function showModel(id)
     console.log(cssElement);
     
     scene.add(cssElement);
-   
+
 }
 
 function showGroup(group)
@@ -311,6 +319,15 @@ function onDocumentMouseDown(event)
                     console.log(CLICKED.parent);
                 }
             });
+        }else{
+            CLICKED.traverse ( function (child) {
+                if (child instanceof THREE.Mesh) {
+                    //child.scale.set(15,15,15);
+                    console.log(CLICKED.parent);
+                    showModel(CLICKED.parent.name);
+                }
+            });
+
         }
         
 
