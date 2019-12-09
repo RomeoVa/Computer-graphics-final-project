@@ -12,7 +12,8 @@ body {
 
 #container {
 	position:absolute;
-	display: block;
+	width:80%;
+	display: inline-block;
 }
 
 #webglcanvas {
