@@ -338,10 +338,14 @@ function changeFlag(tag)
 
 function onDocumentMouseDown(event)
 {
+    var canvas = document.getElementById("webglcanvas");
+    console.log("CANVAS", canvas);
     event.preventDefault();
     event.preventDefault();
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    //mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    //mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    mouse.x = ( event.clientX / canvas.width ) * 2 - 1;
+    mouse.y = - ( event.clientY /canvas.height ) * 2 + 1;
 
     //deleteElements = document.getElementById("myRadio").value;
 
@@ -465,9 +469,12 @@ function createScene(canvas)
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
+    //renderer.setSize( canvas.width, canvas.height );
+
     //create a CSS3DRenderer
     CSS3DRenderer = new THREE.CSS3DRenderer();
-    CSS3DRenderer.setSize(window.innerWidth, window.innerHeight);
+    //CSS3DRenderer.setSize(window.innerWidth, window.innerHeight);
+    CSS3DRenderer.setSize(canvas.width, canvas.height);
 //        renderer.domElement.style.position = 'absolute';
 //        renderer.domElement.style.top = 0;
 
