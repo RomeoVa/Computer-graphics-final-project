@@ -10,6 +10,7 @@ bone = null,
 orbitControls = null,
 dragControls=null;
 var objLoader;
+var cssAnimator;
 
 
 var currentTime = Date.now();
@@ -80,6 +81,34 @@ function onWindowResize()
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
+function createCSSAnimation()
+{
+    
+    cssAnimator = new KF.KeyFrameAnimator;
+    cssAnimator.init({ 
+            interps:
+                [
+                    { 
+                        keys:[0, 0.25, 0.5, 0.75, 1], 
+                        values:[
+                                { y : camera.rotation.y / 4 },
+                                { y : camera.rotation.y / 2},
+                                { y : - camera.rotation.y / 4},
+                                { y : - camera.rotation.y / 2},
+                                { y : - camera.rotation.y / 4},
+                                ],
+                        target:cssElement.rotation
+                    },
+                ],
+            loop: true,
+            duration:5000,
+
+    });
+
+    cssAnimator.start();
+        
+}
+
 function createAnimation()
 {
 
@@ -121,7 +150,7 @@ function run() {
         orbitControls.update();
 
         animate();
-        //KF.update();
+        KF.update();
       
 }
 
@@ -171,31 +200,48 @@ function showModel(id)
     }
 
     showCSS(id);
+    //createCameraAnimation();
    
 }
 
 function showCSS(id)
 {
-
-    if(cssElement != null)
-    {
-        scene.remove(cssElement);
-    }
+    //Remove current Css element
+    removeCSS();
 
     var content = '<div id="css-content">' + armInfo[id] + '</div>'
 
     //Css 3d objects
     cssElement = createCSS3DObject(content);
-    cssElement.position.set(0, 0, 0);
-    cssElement.rotation.set(0,Math.PI,0);
-    console.log(cssElement);
+
+    //Set Css position in front of the camera
+    var vec = new THREE.Vector3( 500, 100, -10 );
+    vec.applyQuaternion( camera.quaternion );
+    cssElement.position.copy( vec );
+    cssElement.rotation.set(camera.rotation.x,camera.rotation.y,camera.rotation.z);
+
     
     scene.add(cssElement);
+
+    //createCSSAnimation();
+
+}
+
+function removeCSS()
+{
+    if(cssElement != null)
+    {
+        //cssAnimator.stop();
+        scene.remove(cssElement);
+    }
 
 }
 
 function showGroup(group)
 {
+    //Remove current Css element
+    removeCSS();
+    
     console.log("show group");
     for(var i = 0; i < armArray.length; i++)
     {
